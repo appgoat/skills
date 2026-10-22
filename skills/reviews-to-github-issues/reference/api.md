@@ -18,5 +18,5 @@ curl -s -G -H "x-api-key: $APPGOAT_API_KEY" "https://api.appgoat.ai/v1/apps/$APP
 ```
 
 Review fields: `review_id`, `country`, `rating`, `title`, `body`, `version`, `thumbs_up`, `reply`,
-`replied_at`, `created_at`, and (rolling out) `sentiment`, `intent`, `topics`. `author` is present
+`replied_at`, `created_at`, and the AI tags `sentiment` (positive|neutral|negative), `intent` (bug|crash|feature_request|pricing|ux|praise|spam|other), `severity` (0–3), `topic`, `confidence` (null until a review is tagged). `author` is present
 but must not be copied into issues.

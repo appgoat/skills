@@ -1,7 +1,7 @@
 ---
 name: find-app-ideas
 description: Finds underserved App Store / Google Play niches with live AppGoat data - search demand (keyword popularity) against weak supply (low ratings, abandoned incumbents, few strong apps) - and returns a ranked shortlist of app ideas with evidence and user pain points. Use when the user says "find me an app idea", "what app should I build", "underserved niches", "app opportunities in <category>", "is there demand for a <type> app" or wants to validate an idea before building.
-argument-hint: [niche] [store] [country]
+argument-hint: "[niche] [store] [country]"
 license: MIT
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: app-audit-lite
 description: Runs a quick App Store / Google Play audit of one app with live AppGoat data - listing quality, ratings trend, recent complaints, keyword rankings, competitors and their recent changes - and ends with a prioritized fix list. Use when the user says "audit my app", "review my App Store listing", "why are my downloads dropping", "how does my app compare to competitors", "ASO check" or pastes an App Store / Google Play link and asks what to improve.
-argument-hint: <app> [country]
+argument-hint: "<app> [country]"
 license: MIT
 ---
 

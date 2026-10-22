@@ -1,7 +1,7 @@
 ---
 name: reviews-to-github-issues
 description: Turns recent negative App Store / Google Play reviews into deduplicated GitHub issues - one issue per problem topic, with linked and quoted reviews, new reviews added as comments to the existing issue instead of duplicates. Uses AppGoat review data and the gh CLI (or the GitHub MCP server). Use when the user says "turn reviews into issues", "file bugs from app reviews", "what are users complaining about, make tickets", "sync App Store reviews to GitHub" or sets up a daily review triage.
-argument-hint: <app> <repo> [since]
+argument-hint: "<app> <repo> [since]"
 license: MIT
 ---
 
@@ -40,9 +40,11 @@ Costs in AppGoat credits; GitHub calls are free. Without the MCP, use the REST e
    Read the `<!-- appgoat:topic=<slug> app=<store:id> -->` markers so you reuse existing slugs
    for the same problem instead of inventing new ones.
 3. `get_reviews` {app, country: "us", rating: "1-3", since, limit: 100} - **1 per page** (+1 if the
-   US reviews are refreshed). Follow `next_cursor` for up to 3 pages. Optionally try
-   `intent: "bug_report,feature_request"` first; if it answers `invalid_param` (AI filters are
-   rolling out), drop it and classify yourself.
+   US reviews are refreshed). Follow `next_cursor` for up to 3 pages. Reviews carry AI tags
+   (`sentiment`, `intent`, `severity` 0–3, `topic`) once tagged; untagged ones have them null.
+   Use a tagged review's `topic` as the starting point for the slug and `severity` ≥ 2 as "high".
+   Do not filter by `intent`/`topic` here: the filters drop untagged reviews, so read the
+   whole 1–3★ window and classify the untagged ones yourself.
 4. Group the reviews into topics (no calls). A topic is one concrete problem ("login loop after
    update", "widget doesn't refresh"), not a mood ("bad app"). Give each a lowercase slug
    (`login-loop`), reuse an existing slug when it is the same problem. Skip praise, spam, pure

@@ -1,7 +1,7 @@
 ---
 name: aso-keywords-metadata-rewrite
 description: Researches App Store / Google Play keywords for one app with live AppGoat data (current ranks, competitor keyword gaps, popularity, difficulty, relevance) and rewrites the title, subtitle, keyword field and description within the store character limits. Use when the user says "improve my ASO", "rewrite my app title / subtitle", "which keywords should I target", "fill my keyword field", "optimize my App Store listing", "ASO for <app>" or prepares a new version's metadata.
-argument-hint: <app> [country]
+argument-hint: "<app> [country]"
 license: MIT
 ---
 
