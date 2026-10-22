@@ -15,7 +15,9 @@ through `propose_action` (dry run, free) and is applied only after the user appr
 ## When to use
 
 - The user runs Apple Ads for their own app and connected the Apple Ads account in AppGoat
-  (https://dash.appgoat.ai/connections, provider `apple_ads`).
+  (https://dash.appgoat.ai/connections, provider `apple_ads`, Apple Ads Platform API). An API user
+  with access to several ad accounts connects one `ad_account_id` per connection; pick the
+  connection whose account runs the app's campaigns.
 - Not for organic keyword research (use `aso-keywords-metadata-rewrite`) or Google Ads.
 
 ## Inputs
@@ -51,13 +53,14 @@ Costs in AppGoat credits. Without the MCP, use the REST equivalents in [referenc
 5. Apply the decision rules (no calls) and build three lists: bid changes, new exact keywords, negatives.
 6. Propose them as dry runs, one action per ad group and type, with `playbook: "apple-ads-optimizer"` - **0**:
    - `propose_action` {type: "ads.keyword.bid", connection, params: {campaign_id, ad_group_id,
-     keywords: [{id, bid}] or [{id, status: "PAUSED"}], max_increase: 0.3}}
+     keywords: [{id, bid}] or [{id, status: "PAUSED"}], max_increase: 0.3}} (status is
+     `ENABLED` or `PAUSED`; `ENABLED` resumes a paused keyword)
    - `propose_action` {type: "ads.keyword.add", connection, params: {campaign_id, ad_group_id,
      keywords: [{text, match_type: "EXACT", bid}]}}
    - `propose_action` {type: "ads.negative.add", connection, params: {campaign_id, ad_group_id,
      keywords: [{text, match_type: "EXACT"}]}}
    The diffs show current → new bid per keyword; warnings flag bid jumps above `max_increase` and
-   negatives that would block an active keyword.
+   negatives that would block an enabled keyword.
 7. Show the user the summary table (see Output format) with each action id and the expected effect,
    and ask which to apply ("all", "only bids", "all except negatives in ad group X").
 8. `apply_action` {id} for each approved action - **1 per applied action**. `pending_approval` →
@@ -87,7 +90,7 @@ Let `T` = target CPA. Only act on rows with enough data: **taps ≥ 10** or **sp
   spend ≥ T, or one that is clearly irrelevant (another product, a different meaning, a job or
   piracy query) regardless of spend. Prefer EXACT negatives; BROAD only for clearly irrelevant
   words and only with the user's explicit agreement.
-- **Never negate** a term that converts (installs ≥ 1 in the window), that equals an active
+- **Never negate** a term that converts (installs ≥ 1 in the window), that equals an enabled
   keyword in any ad group of the campaign, or the app's own brand. A guardrail warning about a
   blocked keyword means: drop that negative.
 - **Budget:** if the proposed raises would push daily spend past the user's budget (estimate:

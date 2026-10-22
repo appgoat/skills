@@ -19,14 +19,16 @@ header `x-api-key: $APPGOAT_API_KEY` (create a key at https://dash.appgoat.ai). 
 | `reject_action` | `POST /actions/{id}/reject` (free) |
 
 Report rows: `{ dims, impressions, taps, installs, spend, currency, avg_cpt, avg_cpa, ttr,
-conversion_rate }`; `dims` holds Apple's metadata (`keywordId`, `keyword`, `matchType`,
-`adGroupId`, `bidAmount` for keywords; `searchTermText`, `searchTermSource`, `keyword` for search terms).
+conversion_rate }`; `dims` holds Apple's row metadata (Apple Ads Platform API: keyword id, text
+and match type, ad group id and bid for keywords; the search term, its source and the matched
+keyword for search terms). Keyword `status` is `ENABLED` or `PAUSED` (`ACTIVE` is accepted as an
+alias). The connection's `account` shows the `ad_account_id` it acts on.
 
 ```bash
 CON=con_… CAMPAIGN=123456
 curl -s -G -H "x-api-key: $APPGOAT_API_KEY" "https://api.appgoat.ai/v1/connections/$CON/ads" \
   -d view=report -d level=searchterms -d campaign_id=$CAMPAIGN -d start=2026-10-08 -d end=2026-10-21 \
-  | jq -r '.data.rows[] | "\(.dims.searchTermText)\t\(.taps)\t\(.installs)\t\(.spend)"'
+  | jq -r '.data.rows[] | "\(.dims.searchTerm // .dims.searchTermText)\t\(.taps)\t\(.installs)\t\(.spend)"'
 
 # Bids for one ad group, as a dry run
 curl -s -H "x-api-key: $APPGOAT_API_KEY" -H "content-type: application/json" https://api.appgoat.ai/v1/actions \
