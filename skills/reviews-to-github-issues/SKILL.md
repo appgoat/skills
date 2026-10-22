@@ -11,8 +11,8 @@ Reads the app's recent 1–3★ reviews, groups them into problem topics (a cras
 paywall, a missing feature), and keeps exactly one GitHub issue per topic up to date. Running it
 again never duplicates: issues carry a hidden marker, and reviews already linked are skipped.
 
-When AppGoat watches and events ship, a `review_spike` event will be able to trigger this playbook
-instead of a schedule.
+It can also run on AppGoat events (`negative_review_spike`, `review_spike`, `rating_drop` from a
+watch on the app) instead of a schedule; see **Automate it**.
 
 ## When to use
 
@@ -156,6 +156,11 @@ jobs:
             --mcp-config '{"mcpServers":{"appgoat":{"command":"npx","args":["-y","@appgoat/mcp"],"env":{"APPGOAT_API_KEY":"${{ secrets.APPGOAT_API_KEY }}"}}}}'
             --allowedTools mcp__appgoat__get_app,mcp__appgoat__get_reviews,mcp__appgoat__get_job,Write,Bash(gh issue list:*),Bash(gh label list:*),Bash(bash .claude/skills/reviews-to-github-issues/scripts/upsert_issue.sh:*)
 ```
+
+On events instead of a schedule: a watch on the app plus either a `kind: github` webhook that
+starts [events/appgoat-events.yml](events/appgoat-events.yml) through `repository_dispatch` (paid
+plans), or a routine that polls `get_events` / `GET /v1/events` (free, every plan, state kept by
+`scripts/poll_events.sh`). Setup, curl calls and routine prompts: [events/README.md](events/README.md).
 
 Claude Code routine (with the AppGoat connector and GitHub access):
 

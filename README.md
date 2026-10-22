@@ -92,6 +92,25 @@ Every playbook ends with an **Automate it** section:
 
 Add the repository secrets `ANTHROPIC_API_KEY` and `APPGOAT_API_KEY` first.
 
+### On events
+
+Instead of a schedule, a playbook can run when AppGoat sees something happen. Create a **watch**
+(`POST /v1/watches`, free) on an app, competitors or keywords; significant changes become **events**
+(`new_version`, `metadata_change`, `rating_drop`, `negative_review_spike`, `rank_change`, …). Events
+reach an agent in two ways:
+
+- **GitHub Action:** a `kind: github` webhook (`POST /v1/webhooks`, paid plans) makes AppGoat call
+  `repository_dispatch` with `event_type: appgoat.<type>` and the event as `client_payload`; a
+  workflow `on: repository_dispatch` runs the playbook with Claude Code.
+- **Claude Code routine:** `/schedule` or `/loop` polls `GET /v1/events` (MCP `get_events`, free, every
+  plan) with `since=` and runs the playbook when something new shows up.
+
+| Playbook | Event recipes |
+|---|---|
+| `reviews-to-github-issues` | [`events/`](skills/reviews-to-github-issues/events/README.md): `negative_review_spike`, `review_spike`, `rating_drop` → workflow [`appgoat-events.yml`](skills/reviews-to-github-issues/events/appgoat-events.yml), polling routine with [`poll_events.sh`](skills/reviews-to-github-issues/scripts/poll_events.sh) |
+
+Events and deliveries cost no credits; the playbook run they start costs what it costs on a schedule.
+
 ## Layout
 
 ```
@@ -100,6 +119,7 @@ Add the repository secrets `ANTHROPIC_API_KEY` and `APPGOAT_API_KEY` first.
 skills/<name>/SKILL.md            the playbook (frontmatter: name, description, argument-hint)
 skills/<name>/reference/api.md    REST fallback for the tool calls
 skills/<name>/scripts/            helpers (python3 / bash)
+skills/<name>/events/             event recipes: a repository_dispatch workflow and polling routines
 ```
 
 The AppGoat MCP server bundles these playbooks as MCP prompts at build time. Prompt arguments come
