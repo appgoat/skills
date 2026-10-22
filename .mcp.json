@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "appgoat": {
+      "type": "http",
+      "url": "https://api.appgoat.ai/mcp"
+    }
+  }
+}

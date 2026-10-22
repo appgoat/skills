@@ -1,0 +1,40 @@
+{
+  "name": "appgoat",
+  "owner": {
+    "name": "AppGoat",
+    "email": "support@appgoat.ai"
+  },
+  "metadata": {
+    "description": "AppGoat playbooks: Agent Skills for App Store and Google Play work (audits, app ideas, ASO, reviews), backed by live store data from the AppGoat MCP server.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "appgoat-playbooks",
+      "description": "App audit, app idea finder, ASO keyword + metadata rewrite and reviews to GitHub issues, with the AppGoat MCP server bundled.",
+      "version": "0.1.0",
+      "author": {
+        "name": "AppGoat",
+        "email": "support@appgoat.ai"
+      },
+      "homepage": "https://appgoat.ai",
+      "repository": "https://github.com/appgoat/skills",
+      "license": "MIT",
+      "keywords": ["aso", "app-store", "google-play", "reviews", "mcp"],
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/app-audit-lite",
+        "./skills/find-app-ideas",
+        "./skills/aso-keywords-metadata-rewrite",
+        "./skills/reviews-to-github-issues"
+      ],
+      "mcpServers": {
+        "appgoat": {
+          "type": "http",
+          "url": "https://api.appgoat.ai/mcp"
+        }
+      }
+    }
+  ]
+}
