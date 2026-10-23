@@ -139,11 +139,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install AppGoat playbooks
+      - name: Install AppGoat playbooks and MCP config
+        env:
+          APPGOAT_API_KEY: ${{ secrets.APPGOAT_API_KEY }}
         run: |
           git clone --depth 1 https://github.com/appgoat/skills /tmp/appgoat-skills
           mkdir -p .claude/skills
           cp -r /tmp/appgoat-skills/skills/* .claude/skills/
+          # Hosted AppGoat MCP server; the key goes into a file, not the command line.
+          jq -n --arg key "$APPGOAT_API_KEY" \
+            '{mcpServers: {appgoat: {type: "http", url: "https://api.appgoat.ai/mcp", headers: {"x-api-key": $key}}}}' \
+            > "$RUNNER_TEMP/appgoat-mcp.json"
       - uses: anthropics/claude-code-action@v1
         env:
           GH_TOKEN: ${{ github.token }}
@@ -153,7 +159,7 @@ jobs:
             Use the reviews-to-github-issues skill for app <app link>, repo ${{ github.repository }}, since 2 days ago.
             The helper script is at .claude/skills/reviews-to-github-issues/scripts/upsert_issue.sh.
           claude_args: |
-            --mcp-config '{"mcpServers":{"appgoat":{"command":"npx","args":["-y","@appgoat/mcp"],"env":{"APPGOAT_API_KEY":"${{ secrets.APPGOAT_API_KEY }}"}}}}'
+            --mcp-config ${{ runner.temp }}/appgoat-mcp.json
             --allowedTools mcp__appgoat__get_app,mcp__appgoat__get_reviews,mcp__appgoat__get_job,Write,Bash(gh issue list:*),Bash(gh label list:*),Bash(bash .claude/skills/reviews-to-github-issues/scripts/upsert_issue.sh:*)
 ```
 

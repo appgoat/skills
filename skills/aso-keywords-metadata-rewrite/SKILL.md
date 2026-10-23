@@ -122,11 +122,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install AppGoat playbooks
+      - name: Install AppGoat playbooks and MCP config
+        env:
+          APPGOAT_API_KEY: ${{ secrets.APPGOAT_API_KEY }}
         run: |
           git clone --depth 1 https://github.com/appgoat/skills /tmp/appgoat-skills
           mkdir -p .claude/skills
           cp -r /tmp/appgoat-skills/skills/* .claude/skills/
+          # Hosted AppGoat MCP server; the key goes into a file, not the command line.
+          jq -n --arg key "$APPGOAT_API_KEY" \
+            '{mcpServers: {appgoat: {type: "http", url: "https://api.appgoat.ai/mcp", headers: {"x-api-key": $key}}}}' \
+            > "$RUNNER_TEMP/appgoat-mcp.json"
       - uses: anthropics/claude-code-action@v1
         env:
           GH_TOKEN: ${{ github.token }}
@@ -136,7 +142,7 @@ jobs:
             Use the aso-keywords-metadata-rewrite skill for <app link>, country us. Do not call track_keywords.
             Write the result to metadata/us.md, commit it on a new branch and open a pull request with gh pr create.
           claude_args: |
-            --mcp-config '{"mcpServers":{"appgoat":{"command":"npx","args":["-y","@appgoat/mcp"],"env":{"APPGOAT_API_KEY":"${{ secrets.APPGOAT_API_KEY }}"}}}}'
+            --mcp-config ${{ runner.temp }}/appgoat-mcp.json
             --allowedTools mcp__appgoat__get_app,mcp__appgoat__get_app_keywords,mcp__appgoat__get_competitors,mcp__appgoat__keyword_research,mcp__appgoat__get_job,Write,Bash(python3 .claude/skills/aso-keywords-metadata-rewrite/scripts/check_metadata.py:*),Bash(git:*),Bash(gh pr create:*)
 ```
 

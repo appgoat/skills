@@ -129,11 +129,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install AppGoat playbooks
+      - name: Install AppGoat playbooks and MCP config
+        env:
+          APPGOAT_API_KEY: ${{ secrets.APPGOAT_API_KEY }}
         run: |
           git clone --depth 1 https://github.com/appgoat/skills /tmp/appgoat-skills
           mkdir -p .claude/skills
           cp -r /tmp/appgoat-skills/skills/* .claude/skills/
+          # Hosted AppGoat MCP server; the key goes into a file, not the command line.
+          jq -n --arg key "$APPGOAT_API_KEY" \
+            '{mcpServers: {appgoat: {type: "http", url: "https://api.appgoat.ai/mcp", headers: {"x-api-key": $key}}}}' \
+            > "$RUNNER_TEMP/appgoat-mcp.json"
       - uses: anthropics/claude-code-action@v1
         env:
           GH_TOKEN: ${{ github.token }}
@@ -143,7 +149,7 @@ jobs:
             Use the find-app-ideas skill with niche "${{ inputs.niche }}" (empty = chart scan), store apple, country us.
             Open one GitHub issue titled "App ideas <YYYY-MM>" with the report as the body (gh issue create).
           claude_args: |
-            --mcp-config '{"mcpServers":{"appgoat":{"command":"npx","args":["-y","@appgoat/mcp"],"env":{"APPGOAT_API_KEY":"${{ secrets.APPGOAT_API_KEY }}"}}}}'
+            --mcp-config ${{ runner.temp }}/appgoat-mcp.json
             --allowedTools mcp__appgoat__get_charts,mcp__appgoat__keyword_research,mcp__appgoat__get_app,mcp__appgoat__search_apps,mcp__appgoat__get_reviews,mcp__appgoat__get_job,Bash(gh issue create:*)
 ```
 
