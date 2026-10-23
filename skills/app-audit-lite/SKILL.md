@@ -11,13 +11,21 @@ A 10-minute audit of one app from public store data: what the listing says, how 
 what they complain about, which searches it wins, and what competitors changed recently. It ends
 with at most 7 fixes, ordered by expected impact.
 
-This is the "lite" version that runs on today's AppGoat API. A hosted `POST /v1/apps/{app}/audit`
-(AI-written report, shareable page) is coming; when it exists, step 1–6 collapse into that call.
+This is the cheap "lite" path (~25–40 credits), assembled from the AppGoat read tools. The full
+App Audit is live as the `audit_app` MCP tool (`POST /v1/apps/{app}/audit`): an AI-written,
+evidence-checked report with a 0–100 score, prioritised actions, metadata rewrites within the
+character limits, ~20 probed search terms and a shareable report page. It takes 1–3 minutes:
+`audit_app` waits about 25 s and returns an audit id, which `get_audit` follows up on (free). The
+first audit of an organization is free, later ones cost 100 credits, and re-running the same app,
+country and mode within 24 h returns the earlier audit for free.
 
 ## When to use
 
 - The user wants an assessment of their own app or a competitor's ("audit", "teardown", "what should I fix").
 - Before an ASO rewrite (run `aso-keywords-metadata-rewrite` afterwards for the metadata itself).
+- Prefer `audit_app` instead when the user wants the full report or a link to share, or has not used
+  their free audit yet (call it with `free_only: true` to run it only if it is free). Stay on this
+  lite flow when credits are tight or for a quick check.
 - Not for idea hunting (use `find-app-ideas`) or for turning reviews into tickets (use `reviews-to-github-issues`).
 
 ## Inputs
