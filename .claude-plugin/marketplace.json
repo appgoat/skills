@@ -5,13 +5,13 @@
     "email": "support@appgoat.ai"
   },
   "metadata": {
-    "description": "AppGoat playbooks: Agent Skills for App Store and Google Play work (audits, app ideas, ASO, reviews, review replies, Apple Ads, localization), backed by live store data and connected accounts through the AppGoat MCP server.",
+    "description": "AppGoat playbooks: Agent Skills for App Store and Google Play work (audits, app ideas, ASO, competitor digests, reviews, review replies, Apple Ads, localization), backed by live store data and connected accounts through the AppGoat MCP server.",
     "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "appgoat-playbooks",
-      "description": "App audit, app idea finder, ASO keyword + metadata rewrite, reviews to GitHub issues, and on connected accounts review replies, Apple Ads optimization and localization pushes, with the AppGoat MCP server bundled.",
+      "description": "App audit, app idea finder, ASO keyword + metadata rewrite, weekly competitor digest, reviews to GitHub issues, and on connected accounts review replies, Apple Ads optimization and localization pushes, with the AppGoat MCP server bundled.",
       "version": "0.1.0",
       "author": {
         "name": "AppGoat",
@@ -20,13 +20,14 @@
       "homepage": "https://appgoat.ai",
       "repository": "https://github.com/appgoat/skills",
       "license": "MIT",
-      "keywords": ["aso", "app-store", "google-play", "reviews", "mcp", "apple-ads"],
+      "keywords": ["aso", "app-store", "google-play", "reviews", "mcp", "apple-ads", "competitors"],
       "source": "./",
       "strict": false,
       "skills": [
         "./skills/app-audit-lite",
         "./skills/find-app-ideas",
         "./skills/aso-keywords-metadata-rewrite",
+        "./skills/competitor-digest",
         "./skills/reviews-to-github-issues",
         "./skills/reply-to-every-review",
         "./skills/apple-ads-optimizer",

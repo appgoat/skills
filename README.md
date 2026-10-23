@@ -11,6 +11,7 @@ charts, competitors and listing changes for both stores.
 | [`app-audit-lite`](skills/app-audit-lite/SKILL.md) | Quick audit of one app: listing, ratings trend, complaints, keyword ranks, competitors, prioritized fixes | ~25–40 |
 | [`find-app-ideas`](skills/find-app-ideas/SKILL.md) | Underserved niches: high search demand, weak incumbents, a complaint to build on | ~150–250 |
 | [`aso-keywords-metadata-rewrite`](skills/aso-keywords-metadata-rewrite/SKILL.md) | Keyword research and a title / subtitle / keyword field / description rewrite within store limits | ~40–80 |
+| [`competitor-digest`](skills/competitor-digest/SKILL.md) | Weekly digest of competitor changes (listing, price/IAP, versions, rating and chart moves, keyword gains and losses, review themes) from a competitor watch, with 3 recommended actions | ~15–55 |
 | [`reviews-to-github-issues`](skills/reviews-to-github-issues/SKILL.md) | Negative reviews → one deduplicated GitHub issue per problem, new reviews as comments | ~2–10 |
 | [`reply-to-every-review`](skills/reply-to-every-review/SKILL.md) | Reply to every unanswered review of your app in its voice; each reply a dry run with guardrail scores, posted on approval | ~1–3 + 1 per posted reply |
 | [`apple-ads-optimizer`](skills/apple-ads-optimizer/SKILL.md) | Apple Ads: raise bids under target CPA, pause wasteful keywords, harvest search terms as exact keywords and negatives | ~5–8 per campaign + 1 per applied change |
@@ -35,6 +36,7 @@ output format, and an **Automate it** section with a GitHub Action and a Claude 
   `https://api.appgoat.ai/mcp` (OAuth sign-in, or an `x-api-key` header). Local alternative:
   `npx -y @appgoat/mcp` with `APPGOAT_API_KEY` set.
 - `reviews-to-github-issues`: the [GitHub CLI](https://cli.github.com) (`gh auth login`) or the GitHub MCP server.
+- `competitor-digest`: nothing extra to run it; posting it needs `gh` (GitHub issue) or a Slack incoming webhook. The free plan watches 3 apps (yours + 2 competitors), Indie 25.
 - `reply-to-every-review`, `localization-push`: an App Store Connect and/or Play Console connection; `apple-ads-optimizer`: an Apple Ads connection (Indie plan or higher to apply actions; Free connections are read-only).
 - Scripts run with `python3` and `bash`; no other dependencies.
 
@@ -104,7 +106,7 @@ Add the repository secrets `ANTHROPIC_API_KEY` and `APPGOAT_API_KEY` first.
 
 ### On events
 
-Instead of a schedule, a playbook can run when AppGoat sees something happen. Create a **watch**
+Instead of (or next to) a schedule, a playbook can run when AppGoat sees something happen. Create a **watch**
 (`POST /v1/watches`, free) on an app, competitors or keywords; significant changes become **events**
 (`new_version`, `metadata_change`, `rating_drop`, `negative_review_spike`, `rank_change`, …). Events
 reach an agent in two ways:
@@ -117,6 +119,7 @@ reach an agent in two ways:
 
 | Playbook | Event recipes |
 |---|---|
+| `competitor-digest` | [`events/`](skills/competitor-digest/events/README.md): weekly cron workflow [`appgoat-digest.yml`](skills/competitor-digest/events/appgoat-digest.yml) that posts the digest to a GitHub issue or Slack ([`post_digest.sh`](skills/competitor-digest/scripts/post_digest.sh)), `/schedule` routine, optional instant Slack alerts |
 | `reviews-to-github-issues` | [`events/`](skills/reviews-to-github-issues/events/README.md): `negative_review_spike`, `review_spike`, `rating_drop` → workflow [`appgoat-events.yml`](skills/reviews-to-github-issues/events/appgoat-events.yml), polling routine with [`poll_events.sh`](skills/reviews-to-github-issues/scripts/poll_events.sh) |
 
 Events and deliveries cost no credits; the playbook run they start costs what it costs on a schedule.
