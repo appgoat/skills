@@ -12,9 +12,18 @@ charts, competitors and listing changes for both stores.
 | [`find-app-ideas`](skills/find-app-ideas/SKILL.md) | Underserved niches: high search demand, weak incumbents, a complaint to build on | ~150–250 |
 | [`aso-keywords-metadata-rewrite`](skills/aso-keywords-metadata-rewrite/SKILL.md) | Keyword research and a title / subtitle / keyword field / description rewrite within store limits | ~40–80 |
 | [`reviews-to-github-issues`](skills/reviews-to-github-issues/SKILL.md) | Negative reviews → one deduplicated GitHub issue per problem, new reviews as comments | ~2–10 |
+| [`reply-to-every-review`](skills/reply-to-every-review/SKILL.md) | Reply to every unanswered review of your app in its voice; each reply a dry run with guardrail scores, posted on approval | ~1–3 + 1 per posted reply |
+| [`apple-ads-optimizer`](skills/apple-ads-optimizer/SKILL.md) | Apple Ads: raise bids under target CPA, pause wasteful keywords, harvest search terms as exact keywords and negatives | ~5–8 per campaign + 1 per applied change |
+| [`localization-push`](skills/localization-push/SKILL.md) | Localized name, subtitle, keywords and promo text per locale from local keyword research, pushed to App Store Connect / Play Console | ~35–60 per locale + 1 per applied change |
 
 The free plan has 250 credits a month plus a free first audit; see [appgoat.ai/pricing](https://appgoat.ai/pricing).
 Every tool result shows `credits_used` and `credits_remaining`.
+
+The last three work on **your own** app through a connected App Store Connect, Play Console or
+Apple Ads account (connect it at [dash.appgoat.ai/connections](https://dash.appgoat.ai/connections)).
+Every change is first a dry run (`propose_action`, free) that shows a before → after diff and
+AppGoat's guardrail scores (store policy, tone, claims); it is written only after you approve it,
+in the chat (`apply_action`) or in the dashboard when your organization requires a person to approve.
 
 Each skill folder has a `SKILL.md` (when to use, exact tool calls with their cost, decision rules,
 output format, and an **Automate it** section with a GitHub Action and a Claude Code routine), a
@@ -26,6 +35,7 @@ output format, and an **Automate it** section with a GitHub Action and a Claude 
   `https://api.appgoat.ai/mcp` (OAuth sign-in, or an `x-api-key` header). Local alternative:
   `npx -y @appgoat/mcp` with `APPGOAT_API_KEY` set.
 - `reviews-to-github-issues`: the [GitHub CLI](https://cli.github.com) (`gh auth login`) or the GitHub MCP server.
+- `reply-to-every-review`, `localization-push`: an App Store Connect and/or Play Console connection; `apple-ads-optimizer`: an Apple Ads connection (Indie plan or higher to apply actions; Free connections are read-only).
 - Scripts run with `python3` and `bash`; no other dependencies.
 
 ## Install

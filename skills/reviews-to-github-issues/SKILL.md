@@ -17,7 +17,7 @@ instead of a schedule.
 ## When to use
 
 - The user wants app store feedback in their issue tracker, once or on a schedule.
-- Not for answering reviews (a reply playbook comes with store connections) or for a one-off
+- Not for answering reviews (use `reply-to-every-review` with a connected store account) or for a one-off
   sentiment summary (use `app-audit-lite`).
 
 ## Inputs
