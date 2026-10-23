@@ -33,8 +33,8 @@ output format, and an **Automate it** section with a GitHub Action and a Claude 
 ## Requirements
 
 - An AppGoat account ([dash.appgoat.ai](https://dash.appgoat.ai)). The hosted MCP server is
-  `https://api.appgoat.ai/mcp` (OAuth sign-in, or an `x-api-key` header). Local alternative:
-  `npx -y @appgoat/mcp` with `APPGOAT_API_KEY` set.
+  `https://api.appgoat.ai/mcp` (OAuth sign-in, or an `x-api-key` header). There is no npm
+  package; clients that only run local (stdio) servers can bridge with `npx -y mcp-remote https://api.appgoat.ai/mcp`.
 - `reviews-to-github-issues`: the [GitHub CLI](https://cli.github.com) (`gh auth login`) or the GitHub MCP server.
 - `competitor-digest`: nothing extra to run it; posting it needs `gh` (GitHub issue) or a Slack incoming webhook. The free plan watches 3 apps (yours + 2 competitors), Indie 25.
 - `reply-to-every-review`, `localization-push`: an App Store Connect and/or Play Console connection; `apple-ads-optimizer`: an Apple Ads connection (Indie plan or higher to apply actions; Free connections are read-only).

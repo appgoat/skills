@@ -145,11 +145,17 @@ jobs:
   localize:
     runs-on: ubuntu-latest
     steps:
-      - name: Install AppGoat playbooks
+      - name: Install AppGoat playbooks and MCP config
+        env:
+          APPGOAT_API_KEY: ${{ secrets.APPGOAT_API_KEY }}
         run: |
           git clone --depth 1 https://github.com/appgoat/skills /tmp/appgoat-skills
           mkdir -p .claude/skills
           cp -r /tmp/appgoat-skills/skills/* .claude/skills/
+          # Hosted AppGoat MCP server; the key goes into a file, not the command line.
+          jq -n --arg key "$APPGOAT_API_KEY" \
+            '{mcpServers: {appgoat: {type: "http", url: "https://api.appgoat.ai/mcp", headers: {"x-api-key": $key}}}}' \
+            > "$RUNNER_TEMP/appgoat-mcp.json"
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -159,7 +165,7 @@ jobs:
             a blocking check (this submits it for approval in the dashboard). Never call apply_action with force.
             Print the per-locale tables as the job summary.
           claude_args: |
-            --mcp-config '{"mcpServers":{"appgoat":{"command":"npx","args":["-y","@appgoat/mcp"],"env":{"APPGOAT_API_KEY":"${{ secrets.APPGOAT_API_KEY }}"}}}}'
+            --mcp-config ${{ runner.temp }}/appgoat-mcp.json
             --allowedTools mcp__appgoat__list_connections,mcp__appgoat__read_connection,mcp__appgoat__get_app,mcp__appgoat__keyword_research,mcp__appgoat__get_job,mcp__appgoat__propose_action,mcp__appgoat__apply_action,mcp__appgoat__reject_action,mcp__appgoat__get_action
 ```
 
