@@ -11,8 +11,8 @@ Turns "what should I build?" into a ranked shortlist of niches where people sear
 existing apps are weak. Each pick comes with the numbers behind it and what users of the current
 apps complain about, so the idea has a wedge.
 
-A paid `GET /v1/opportunities` endpoint (an opportunity score over the whole catalog) is coming;
-when it exists, steps 1–3 become one call and this playbook only does steps 4–6.
+Everything is built from the public read tools (charts, keyword research, apps, search, reviews),
+so it runs on every plan.
 
 ## When to use
 
@@ -71,7 +71,7 @@ Stop early if `credits_remaining` falls below the remaining budget and tell the 
   - the top 3 average < 5,000 ratings (Apple) / < 100k installs (Play).
 - **Monetization signal:** at least one top-10 app has IAP or is paid, or the term's apps appear in
   the grossing chart. Without it, label the idea "hobby / growth only".
-- **Opportunity score** (rank by it): `popularity × (1 − difficulty/100) × supply_weakness`, where
+- **Idea score** (rank by it): `popularity × (1 − difficulty/100) × supply_weakness`, where
   `supply_weakness` = 1 + 0.25 per weak-supply condition met (max 2).
 - **Wedge:** a pick needs a complaint theme mentioned in ≥ 5 of the incumbents' 1–2★ reviews, or a
   missing feature named in ≥ 3. No wedge: drop it to the "watch" list.
