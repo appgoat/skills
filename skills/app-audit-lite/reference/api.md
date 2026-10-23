@@ -15,6 +15,8 @@ errors are `{ "error": { "code", "message", "hint" } }` - read `hint`. `{app}` m
 | `get_app_changes` | `GET /apps/{app}/changes?field=title,subtitle&since=YYYY-MM-DD` |
 | `keyword_research` | `GET /keywords?qs=term1,term2&store=apple&country=us&app={app}` |
 | `get_job` | `GET /jobs/{id}` (free) |
+| `audit_app` (full audit) | `POST /apps/{app}/audit` with body `{"country": "us"}` (100 credits, first one free; 202 while running) |
+| `get_audit` | `GET /audits/{id}` (free) |
 
 ```bash
 curl -s -H "x-api-key: $APPGOAT_API_KEY" \
