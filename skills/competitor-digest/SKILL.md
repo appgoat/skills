@@ -39,8 +39,7 @@ the estimate, stop and tell the user.
 ## Steps
 
 Costs in AppGoat credits; every tool output ends with `credits_used` and `credits_remaining`.
-Without the MCP, use the REST equivalents in [reference/api.md](reference/api.md). If a call says
-the data is refreshing (a `job_id`), poll `get_job` {id} (free) and repeat the call once.
+Without the MCP, use the REST equivalents in [reference/api.md](reference/api.md).
 
 1. **Your app.** `get_app` {app, country, include: ["charts"]} - **1**. Note store, app_id, title,
    subtitle, rating, ratings_count, version, languages and chart positions.
@@ -90,6 +89,9 @@ the data is refreshing (a `job_id`), poll `get_job` {id} (free) and repeat the c
 
 Budget: **3 + 5 per competitor** (~28 for 5), +1 if the competitor list came from
 `get_competitors`, +25 with the deep dive, +1 per refresh: **~15–55** per run.
+
+If a call says the data is refreshing (a `job_id`), poll `get_job` {id} (free) every few seconds
+until it is done, then repeat the call once.
 
 ## Decision rules
 
