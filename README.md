@@ -64,7 +64,8 @@ claude mcp add --transport http appgoat https://api.appgoat.ai/mcp
 
 ### Claude.ai and Claude Desktop
 
-1. Add the connector: Settings → Connectors → Add custom connector → URL `https://api.appgoat.ai/mcp`.
+1. **[Add AppGoat to Claude](https://claude.ai/directory/appgoat)** from the connector directory and sign in
+   (or Settings → Connectors → Add custom connector → URL `https://api.appgoat.ai/mcp`).
 2. Add the skills: zip each skill folder (`cd skills && zip -r app-audit-lite.zip app-audit-lite`)
    and upload it in Settings → Capabilities → Skills.
 
@@ -73,19 +74,16 @@ Without uploading skills, the playbooks are also available as **prompts** of the
 
 ### Cursor
 
-1. Add the MCP server to `.cursor/mcp.json` (or the global config):
-
-   ```json
-   { "mcpServers": { "appgoat": { "url": "https://api.appgoat.ai/mcp" } } }
-   ```
+1. [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=appgoat&config=eyJ1cmwiOiJodHRwczovL2FwaS5hcHBnb2F0LmFpL21jcCJ9) and sign in. Or add it to
+   `.cursor/mcp.json` by hand: `{ "mcpServers": { "appgoat": { "url": "https://api.appgoat.ai/mcp" } } }`.
 
 2. Use the playbooks as MCP prompts (type `/` in the chat), or copy a `SKILL.md` into
    `.cursor/rules/<name>.mdc` to make it a rule the agent can apply.
 
 ### ChatGPT
 
-Enable developer mode (Settings → Apps & Connectors → Advanced), add a connector with the URL
-`https://api.appgoat.ai/mcp` and sign in. ChatGPT does not load skill folders: ask it to "use the
+AppGoat is coming soon to the ChatGPT app directory. Until then, enable developer mode (Settings →
+Apps & Connectors → Advanced), create an app with the URL `https://api.appgoat.ai/mcp` and sign in. ChatGPT does not load skill folders: ask it to "use the
 AppGoat list_playbooks tool and run the reviews-to-github-issues playbook", which returns the
 playbook text from the server.
 
