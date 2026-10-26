@@ -45,9 +45,10 @@ equivalents in [reference/api.md](reference/api.md).
 7. Write the metadata (no calls), then validate it with
    `python3 scripts/check_metadata.py --store <apple|play> --title "…" --subtitle "…" --keywords "…"`
    (Play: `--short "…" --full-file description.txt`). Fix every error it reports before answering.
-8. Optional: `track_keywords` {terms: the 10–20 chosen terms, store, countries: [country]} - **0
-   credits**, uses keyword slots - so the next run can measure the effect with `get_keyword_ranks`.
-   Ask before tracking.
+8. Optional: `watch` {kind: "keyword", app, terms: the 10–20 chosen terms, countries: [country]} -
+   **0 credits**, uses keyword slots - so rank moves arrive as events (`get_events`, daily email) and
+   the next run can measure the effect with `get_keyword_ranks` (slot ids from the watch). Ask before
+   watching.
 
 Budget: about **40–80 credits** per country.
 
@@ -96,7 +97,7 @@ Budget: about **40–80 credits** per country.
 - Dropped <term>: popularity 8.
 
 ## Measure it
-Track these terms (`track_keywords`) and compare ranks 2 and 4 weeks after the release.
+Watch these terms (`watch`, kind `keyword`) and compare ranks 2 and 4 weeks after the release.
 
 _check_metadata.py: OK · Credits used: <sum>._
 ```
@@ -139,7 +140,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
-            Use the aso-keywords-metadata-rewrite skill for <app link>, country us. Do not call track_keywords.
+            Use the aso-keywords-metadata-rewrite skill for <app link>, country us. Do not call watch.
             Write the result to metadata/us.md, commit it on a new branch and open a pull request with gh pr create.
           claude_args: |
             --mcp-config ${{ runner.temp }}/appgoat-mcp.json
@@ -149,5 +150,5 @@ jobs:
 Claude Code routine:
 
 ```text
-/schedule monthly on the 15th at 09:00 - Run the aso-keywords-metadata-rewrite playbook for <app link> in us. Compare the ranks of our tracked keywords (list_tracked_keywords, get_keyword_ranks) with last month and propose a new title/subtitle/keyword field only if a target term lost ≥ 5 positions or a competitor took it.
+/schedule monthly on the 15th at 09:00 - Run the aso-keywords-metadata-rewrite playbook for <app link> in us. Compare the ranks of our watched keywords (list_watches kind keyword, get_keyword_ranks) with last month and propose a new title/subtitle/keyword field only if a target term lost ≥ 5 positions or a competitor took it.
 ```
