@@ -101,8 +101,8 @@ Stop early if `credits_remaining` falls below the remaining budget and tell the 
 
 _Credits used: <sum of the footers>._
 
-**Automate this →** re-run monthly to see new movers; once you pick one, track its keywords with
-`track_keywords` and run `aso-keywords-metadata-rewrite` before launch.
+**Automate this →** re-run monthly to see new movers; once you pick one, watch its keywords with
+`watch` (kind `keyword`) and run `aso-keywords-metadata-rewrite` before launch.
 ```
 
 ## Automate it
