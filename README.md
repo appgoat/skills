@@ -82,8 +82,8 @@ Without uploading skills, the playbooks are also available as **prompts** of the
 
 ### ChatGPT
 
-AppGoat is coming soon to the ChatGPT app directory. Until then, enable developer mode (Settings →
-Apps & Connectors → Advanced), create an app with the URL `https://api.appgoat.ai/mcp` and sign in. ChatGPT does not load skill folders: ask it to "use the
+In ChatGPT, open Plugins → Add → Add custom MCP server, paste the URL `https://api.appgoat.ai/mcp`
+and sign in with your AppGoat account. ChatGPT does not load skill folders: ask it to "use the
 AppGoat list_playbooks tool and run the reviews-to-github-issues playbook", which returns the
 playbook text from the server.
 
