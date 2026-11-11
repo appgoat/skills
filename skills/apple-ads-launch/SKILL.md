@@ -48,7 +48,7 @@ Competitor 20%, Discovery 20%. Skip Competitor when the user doesn't want conque
 Costs in AppGoat credits. Without the MCP, use the REST equivalents in [reference/api.md](reference/api.md).
 
 1. `list_connections` {provider: "apple_ads"} - **0**. Pick an `active` connection whose linked
-   apps include the app (`mode: actions` to create anything; `read_only` can only dry-run: say so).
+   apps include the app (`mode: actions` to create anything; `mode: read_only` can only dry-run: say so).
    App not linked: ask the user to link it at https://dash.appgoat.ai/connections and stop.
 2. `read_connection` {id, what: "ads", view: "campaigns"} - **1**. If the app already has campaigns,
    show them and ask whether to add the missing parts only (reuse names, skip existing campaigns).
