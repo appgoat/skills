@@ -15,12 +15,13 @@ charts, competitors and listing changes for both stores.
 | [`reviews-to-github-issues`](skills/reviews-to-github-issues/SKILL.md) | Negative reviews → one deduplicated GitHub issue per problem, new reviews as comments | ~2–10 |
 | [`reply-to-every-review`](skills/reply-to-every-review/SKILL.md) | Reply to every unanswered review of your app in its voice; each reply a dry run with guardrail scores, posted on approval | ~1–3 + 1 per posted reply |
 | [`apple-ads-optimizer`](skills/apple-ads-optimizer/SKILL.md) | Apple Ads: raise bids under target CPA, pause wasteful keywords, harvest search terms as exact keywords and negatives | ~5–8 per campaign + 1 per applied change |
+| [`apple-ads-launch`](skills/apple-ads-launch/SKILL.md) | Apple Ads from scratch: keyword research from Apple's suggestions and popularity, Brand / Category / Competitor / Discovery campaigns with cross negatives, created paused for you to enable | ~15–40 + 1 per applied change |
 | [`localization-push`](skills/localization-push/SKILL.md) | Localized name, subtitle, keywords and promo text per locale from local keyword research, pushed to App Store Connect / Play Console | ~35–60 per locale + 1 per applied change |
 
 The free plan has 250 credits a month plus a free first audit; see [appgoat.ai/pricing](https://appgoat.ai/pricing).
 Every tool result shows `credits_used` and `credits_remaining`.
 
-The last three work on **your own** app through a connected App Store Connect, Play Console or
+The last four work on **your own** app through a connected App Store Connect, Play Console or
 Apple Ads account (connect it at [dash.appgoat.ai/connections](https://dash.appgoat.ai/connections)).
 Every change is first a dry run (`propose_action`, free) that shows a before → after diff and
 AppGoat's guardrail scores (store policy, tone, claims); it is written only after you approve it,
@@ -37,7 +38,7 @@ output format, and an **Automate it** section with a GitHub Action and a Claude 
   package; clients that only run local (stdio) servers can bridge with `npx -y mcp-remote https://api.appgoat.ai/mcp`.
 - `reviews-to-github-issues`: the [GitHub CLI](https://cli.github.com) (`gh auth login`) or the GitHub MCP server.
 - `competitor-digest`: nothing extra to run it; posting it needs `gh` (GitHub issue) or a Slack incoming webhook. The free plan watches 3 apps (yours + 2 competitors), Indie 25.
-- `reply-to-every-review`, `localization-push`: an App Store Connect and/or Play Console connection; `apple-ads-optimizer`: an Apple Ads connection (Indie plan or higher to apply actions; Free connections are read-only).
+- `reply-to-every-review`, `localization-push`: an App Store Connect and/or Play Console connection; `apple-ads-optimizer`, `apple-ads-launch`: an Apple Ads connection (Indie plan or higher to apply actions; Free connections are read-only).
 - Scripts run with `python3` and `bash`; no other dependencies.
 
 ## Install
