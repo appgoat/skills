@@ -19,7 +19,7 @@ successful search results accounts use:
 
 Each campaign gets the other campaigns' keywords as EXACT negatives, so a search triggers one
 campaign only and the reports stay clean. Everything is created **PAUSED**; enabling is a separate
-step that only a person can approve, so nothing spends until the user switches it on.
+step the user confirms, so nothing spends until they say so.
 
 ## When to use
 
@@ -66,22 +66,24 @@ Costs in AppGoat credits. Without the MCP, use the REST equivalents in [referenc
    Show it to the user as the plan table (see Output format) and get a yes before creating anything.
 6. Create, in order, each as a dry run with `playbook: "apple-ads-launch"`, then `apply_action`
    after the user approved the plan - **0 per dry run, 1 per applied action**:
-   1. `propose_action` {type: "ads.campaign.create", connection, params: {app, name:
+   1. `propose_action` {type: "apple_ads.campaign.create", connection, params: {app, name:
       "<App> - Brand - <CC>", countries: ["US"], daily_budget, max_daily_budget: <B>}} → apply →
       the result's `campaign.id`. Same for Category, Competitor, Discovery.
-   2. Per campaign `ads.adgroup.create` {campaign_id, name: "Exact" (Discovery: "Search Match"),
+   2. Per campaign `apple_ads.adgroup.create` {campaign_id, name: "Exact" (Discovery: "Search Match"),
       default_bid, search_match: false (Discovery: true)} → apply → `ad_group.id`.
-   3. `ads.keyword.add` {campaign_id, ad_group_id, keywords: [{text, match_type: "EXACT", bid}]}
+   3. `apple_ads.keyword.add` {campaign_id, ad_group_id, keywords: [{text, match_type: "EXACT", bid}]}
       for Brand, Category and Competitor (≤ 200 per action).
-   4. Cross negatives at campaign level: `ads.negative.add` {campaign_id, keywords: [{text,
+   4. Cross negatives at campaign level: `apple_ads.negative.add` {campaign_id, keywords: [{text,
       match_type: "EXACT"}]}: Discovery gets every keyword of the other three; Category gets the
       brand terms; Competitor gets the brand terms.
    Read the diff of each step before applying: a blocking check (a duplicate name, a storefront the
    app is not in) stops that item; fix the params and propose again.
-7. Show the summary (see Output format) with the campaign ids. To go live the user enables each
-   campaign: `propose_action` {type: "ads.campaign.update", params: {campaign_id, status:
-   "ENABLED"}}. This is marked "can raise ad spend" and only a person can approve it: give the user
-   the approve links (or they enable it in Apple Ads). Never try to approve it as the agent.
+7. Show the summary (see Output format) with the campaign ids and ask whether to go live. Only
+   after the user explicitly says to enable a campaign: `propose_action` {type:
+   "apple_ads.campaign.update", params: {campaign_id, status: "ENABLED"}} (marked "can raise ad
+   spend"), show the diff with its daily budget, then `apply_action`. It applies when the org lets
+   agents approve; otherwise it waits for approval in the dashboard: give the user the approve link.
+   Enabling is never auto-applied by approval rules.
 8. Suggest a check-in after 7 days with `apple-ads-optimizer`.
 
 Budget: **~15–40 credits** for research + 1 per applied action (about 10–15 for a full setup).

@@ -56,12 +56,12 @@ Costs in AppGoat credits. Without the MCP, use the REST equivalents in [referenc
    apps win each term.
 5. Apply the decision rules (no calls) and build three lists: bid changes, new exact keywords, negatives.
 6. Propose them as dry runs, one action per ad group and type, with `playbook: "apple-ads-optimizer"` - **0**:
-   - `propose_action` {type: "ads.keyword.bid", connection, params: {campaign_id, ad_group_id,
+   - `propose_action` {type: "apple_ads.keyword.bid", connection, params: {campaign_id, ad_group_id,
      keywords: [{id, bid}] or [{id, status: "PAUSED"}], max_increase: 0.3}} (status is
      `ENABLED` or `PAUSED`; `ENABLED` resumes a paused keyword)
-   - `propose_action` {type: "ads.keyword.add", connection, params: {campaign_id, ad_group_id,
+   - `propose_action` {type: "apple_ads.keyword.add", connection, params: {campaign_id, ad_group_id,
      keywords: [{text, match_type: "EXACT", bid}]}}
-   - `propose_action` {type: "ads.negative.add", connection, params: {campaign_id, ad_group_id,
+   - `propose_action` {type: "apple_ads.negative.add", connection, params: {campaign_id, ad_group_id,
      keywords: [{text, match_type: "EXACT"}]}}
    The diffs show current → new bid per keyword; warnings flag bid jumps above `max_increase` and
    negatives that would block an enabled keyword.
@@ -100,8 +100,8 @@ Let `T` = target CPA. Only act on rows with enough data: **taps ≥ 10** or **sp
 - **Budget:** if the proposed raises would push daily spend past the user's budget (estimate:
   current daily spend × (1 + weighted bid increase)), scale the raises down. This playbook never
   changes campaign budgets or status on its own; if the user asks for it, propose
-  `ads.campaign.update` {campaign_id, daily_budget} (a higher budget or enabling a campaign is
-  marked "can raise ad spend" and only a person can approve it in the dashboard).
+  `apple_ads.campaign.update` {campaign_id, daily_budget} (a higher budget or enabling a campaign is
+  marked "can raise ad spend"; show it and apply only on the user's explicit go-ahead).
 - Changes compound: one run per week, and never re-raise a keyword raised in the last 7 days
   (check `get_action` history or ask).
 

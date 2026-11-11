@@ -33,7 +33,7 @@ curl -s -G -H "x-api-key: $APPGOAT_API_KEY" "https://api.appgoat.ai/v1/connectio
 
 # Bids for one ad group, as a dry run
 curl -s -H "x-api-key: $APPGOAT_API_KEY" -H "content-type: application/json" https://api.appgoat.ai/v1/actions \
-  -d '{"type":"ads.keyword.bid","connection":"'$CON'","dry_run":true,"source":"playbook:apple-ads-optimizer",
+  -d '{"type":"apple_ads.keyword.bid","connection":"'$CON'","dry_run":true,"source":"playbook:apple-ads-optimizer",
        "params":{"campaign_id":"'$CAMPAIGN'","ad_group_id":"789","max_increase":0.3,
                  "keywords":[{"id":"111","bid":1.3},{"id":"112","status":"PAUSED"}]}}' | jq '.data | {id, diff, guardrail}'
 ```
