@@ -41,15 +41,19 @@ Costs in AppGoat credits. Without the MCP, use the REST equivalents in [referenc
    (adam id), countries, daily budget. Pick the campaigns.
 3. Per campaign:
    - `read_connection` {id, what: "ads", view: "ad_groups", campaign_id} - **1** (ad group ids, default bids).
+   - Optional trend: `read_connection` {id, what: "ads", view: "report", level: "campaigns", start,
+     end, granularity: "DAILY"} - **1** (spend and installs per day; spot a recent drop before judging keywords).
    - `read_connection` {id, what: "ads", view: "report", level: "keywords", campaign_id, start, end} - **1**:
      per keyword impressions, taps, installs, spend, avg CPT, avg CPA, keyword id, ad group id, bid.
    - `read_connection` {id, what: "ads", view: "report", level: "searchterms", campaign_id, start, end} - **1**:
      the search terms that triggered the ads, with the keyword that matched them.
    - `read_connection` {id, what: "ads", view: "negatives", campaign_id} - **1** (existing negatives).
    - For ad groups you will add keywords to: `read_connection` {view: "keywords", campaign_id, ad_group_id} - **1** each.
-4. Optional, for search terms you cannot judge: `keyword_research` {terms: ≤ 25 terms, store:
-   "apple", country: <campaign country>} - **1 per term**. Popularity 5–100 shows whether a term
-   has real search volume; `include: ["top_apps"]` shows which apps win it (relevance check).
+4. Optional, for search terms you cannot judge: `read_connection` {id, what: "ads", view:
+   "popularity", terms: [≤ 100 terms], countries: [<campaign country>]} - **1** gives Apple's own
+   search popularity (1–100; a missing term has very low volume). For relevance, `keyword_research`
+   {terms: ≤ 25 terms, store: "apple", country, include: ["top_apps"]} - **1 per term** shows which
+   apps win each term.
 5. Apply the decision rules (no calls) and build three lists: bid changes, new exact keywords, negatives.
 6. Propose them as dry runs, one action per ad group and type, with `playbook: "apple-ads-optimizer"` - **0**:
    - `propose_action` {type: "ads.keyword.bid", connection, params: {campaign_id, ad_group_id,
@@ -94,7 +98,10 @@ Let `T` = target CPA. Only act on rows with enough data: **taps ≥ 10** or **sp
   keyword in any ad group of the campaign, or the app's own brand. A guardrail warning about a
   blocked keyword means: drop that negative.
 - **Budget:** if the proposed raises would push daily spend past the user's budget (estimate:
-  current daily spend × (1 + weighted bid increase)), scale the raises down; never change campaign budgets.
+  current daily spend × (1 + weighted bid increase)), scale the raises down. This playbook never
+  changes campaign budgets or status on its own; if the user asks for it, propose
+  `ads.campaign.update` {campaign_id, daily_budget} (a higher budget or enabling a campaign is
+  marked "can raise ad spend" and only a person can approve it in the dashboard).
 - Changes compound: one run per week, and never re-raise a keyword raised in the last 7 days
   (check `get_action` history or ask).
 

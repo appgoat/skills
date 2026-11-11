@@ -12,7 +12,8 @@ header `x-api-key: $APPGOAT_API_KEY` (create a key at https://dash.appgoat.ai). 
 | `read_connection` view=ad_groups | `GET /connections/{id}/ads?view=ad_groups&campaign_id=…` |
 | `read_connection` view=keywords | `GET /connections/{id}/ads?view=keywords&campaign_id=…&ad_group_id=…` |
 | `read_connection` view=negatives | `GET /connections/{id}/ads?view=negatives&campaign_id=…` |
-| `read_connection` view=report | `GET /connections/{id}/ads?view=report&level=keywords\|searchterms&campaign_id=…&start=YYYY-MM-DD&end=YYYY-MM-DD` |
+| `read_connection` view=report | `GET /connections/{id}/ads?view=report&level=keywords\|searchterms&campaign_id=…&start=YYYY-MM-DD&end=YYYY-MM-DD` (add `&granularity=DAILY` for a per-day `series`) |
+| `read_connection` view=popularity | `GET /connections/{id}/ads?view=popularity&terms=a,b&countries=us` |
 | `keyword_research` | `GET /keywords?qs=term1,term2&store=apple&country=us` |
 | `propose_action` | `POST /actions` with `"dry_run": true, "source": "playbook:apple-ads-optimizer"` (free) |
 | `apply_action` | `POST /actions/{id}/approve` (1 credit when applied) |
